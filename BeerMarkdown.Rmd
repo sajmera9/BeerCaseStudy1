@@ -39,6 +39,7 @@ merged_data
 
 ```{r}
 #Address the missing values in each column.
+#There are 62 missing values in ABV and 1005 missing values in 1005
 library(naniar)
 gg_miss_var(merged_data)
 sapply(merged_data, function(x) sum(is.na(x)))
@@ -48,10 +49,32 @@ sapply(merged_data, function(x) sum(is.na(x)))
 
 ```{r}
 # 4.   Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
-merged_data %>% group_by(State) %>% summarize(medianABV = median(ABV))
-merged_data %>% !na.rm() %>% group_by(State) %>% summarize(medianABV = median(ABV))
-diamonds %>% 
-group_by(cut) %>% 
-summarize(median = median(price))
+
+#Removed the missing values in the ABV and IBU column.
+#Then got the median ABV and median IBU.
+na_merged_data = merged_data %>% filter(!is.na(ABV) & !is.na(IBU))
+median_data = na_merged_data %>% group_by(State) %>% summarize(medianABV = median(ABV), medianIBU = median(IBU))
+median_data
+
+#created a bar chart comparing the medianABV per state
+median_data %>% ggplot(aes(x = State, y = medianABV, fill = State)) + geom_col()
+
+#created a bar chart comparing the medianIBU per state
+median_data %>% ggplot(aes(x = State, y = medianIBU, fill = State)) + geom_col()
+
+median_data %>% arrange(desc(medianABV))
+```
+
+```{r}
+na_merged_data
+#5.Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
+
+#Get the Max IBU per state
+maxIBU = na_merged_data %>% group_by(State) %>% summarise(MaxIBU.per.State = max(IBU)) %>% arrange(desc(MaxIBU.per.State))
+maxIBU
+
+#Get the Max ABV per state
+maxABV = na_merged_data %>% group_by(State) %>% summarise(MaxABV.per.State = max(ABV)) %>% arrange(desc(MaxABV.per.State))
+maxABV
 ```
 
