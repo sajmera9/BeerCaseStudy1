@@ -20,6 +20,11 @@ breweries = read.csv(file.choose(), header = TRUE)
 #All states with most breweries
 TotalStateCount = breweries %>% group_by(State) %>% count(State) %>% arrange(desc(n))
 
+TotalStateCount%>%
+  ggplot(aes(x=reorder(State,n),y=n, fill=State)) +
+  xlab("State")+
+  geom_col() + coord_flip() + ggtitle('All States with the Most Breweries')
+
 #Top ten states with most breweries.
 StateCount = breweries %>% group_by(State) %>% count(State) %>% arrange(desc(n))
 StateCount%>%
@@ -66,7 +71,7 @@ sapply(merged_data, function(x) sum(is.na(x)))
 na_merged_data = merged_data %>% filter(!is.na(ABV) & !is.na(IBU))
 #Get the median ABV and median IBU.
 median_data = na_merged_data %>% group_by(State) %>% summarize(medianABV = median(ABV), medianIBU = median(IBU))
-
+median_data
 #created a bar chart comparing the medianABV per state
 median_data%>%
   head(10)%>%
