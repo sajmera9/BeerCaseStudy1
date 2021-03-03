@@ -161,5 +161,58 @@ na_merged_data %>% ggplot(aes(x = ABV, y = IBU)) + geom_point() + geom_smooth(me
 
 ```{r}
 # 8.  Budweiser would also like to investigate the difference with respect to IBU and ABV between IPAs (India Pale Ales) and other types of Ale (any beer with “Ale” in its name other than IPA).  You decide to use KNN classification to investigate this relationship.  Provide statistical evidence one way or the other. You can of course assume your audience is comfortable with percentages … KNN is very easy to understand conceptually.
+
+library(class)
+library(caret)
+library(e1071)
+
+knn_data = na_merged_data %>% 
+  mutate(Ale_Type = case_when(
+    grepl("IPA",na_merged_data$Style)==TRUE ~ "IPA",
+    grepl("Ale",na_merged_data$Style)==TRUE ~ "Other Ale",
+    TRUE ~ "other"
+  )
+)
+
+knn_select_data = knn_data %>% filter(Ale_Type=="IPA" | Ale_Type=="Other Ale")
+
+# Looping for many k and the average of training/test partitions
+
+set.seed(6)
+splitPerc = .75
+
+iterations = 100
+numks = 30
+masterAcc = matrix(nrow = iterations, ncol = numks)
+  
+for(j in 1:iterations)
+{
+accs = data.frame(accuracy = numeric(30), k = numeric(30))
+trainIndices = sample(1:dim(knn_select_data)[1],round(splitPerc * dim(knn_select_data)[1]))
+train = knn_select_data[trainIndices,]
+test = knn_select_data[-trainIndices,]
+for(i in 1:numks)
+{
+  classifications = knn(train[,c(4,5)],test[,c(4,5)],train$Ale_Type, prob = TRUE, k = i)
+  table(classifications,test$Ale_Type)
+  CM = confusionMatrix(table(classifications,test$Ale_Type))
+  masterAcc[j,i] = CM$overall[1]
+}
+}
+MeanAcc = colMeans(masterAcc)
+plot(seq(1,numks,1),MeanAcc, type = "l")
+
+# From this it is clear that the best value for k in our KNN is 5.
+
+# k = 5
+
+trainIndices = sample(1:dim(knn_select_data)[1],round(splitPerc * dim(knn_select_data)[1]))
+train = knn_select_data[trainIndices,]
+test = knn_select_data[-trainIndices,]
+
+classifications = knn(train[,c(4,5)],test[,c(4,5)],train$Ale_Type, prob = TRUE, k = 5)
+table(test$Ale_Type,classifications)
+confusionMatrix(table(test$Ale_Type,classifications))
+
 ```
 
