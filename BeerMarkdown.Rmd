@@ -48,8 +48,12 @@ colnames(merged_data)[2] = "Beer_Name"
 colnames(merged_data)[8] = "Brewery_Name"
 
 #Print the first and last six observations
-head(merged_data,6)
-tail(merged_data,6)
+head_merge = head(merged_data,6)
+tail_merge = tail(merged_data,6)
+
+#First and last six observations concatenated into one dataframe
+head_tail_merge = rbind(head_merge, tail_merge)
+head_tail_merge
 ```
 
 ```{r}
@@ -69,9 +73,11 @@ sapply(merged_data, function(x) sum(is.na(x)))
 
 #Removed the missing values in the ABV and IBU column.
 na_merged_data = merged_data %>% filter(!is.na(ABV) & !is.na(IBU))
+
 #Get the median ABV and median IBU.
 median_data = na_merged_data %>% group_by(State) %>% summarize(medianABV = median(ABV), medianIBU = median(IBU))
 median_data
+
 #created a bar chart comparing the medianABV per state
 median_data%>%
   head(10)%>%
@@ -98,9 +104,9 @@ maxIBU = na_merged_data %>% group_by(State) %>% summarise(MaxIBU.per.State = max
 head(maxIBU,3)
 head(maxABV,3)
 
-#Plot of the top 3 states with the highest IBU
+#Plot of the top 10 states with the highest IBU
 maxIBU %>%
-  head(3)%>%
+  head(10)%>%
   ggplot(aes(x=reorder(State,MaxIBU.per.State),y=MaxIBU.per.State, fill=State)) +
   xlab("State")+
   geom_col()  + ggtitle('States with the Highest Max IBU')
@@ -108,9 +114,9 @@ maxIBU %>%
 #Get the Max ABV per state
 maxABV = na_merged_data %>% group_by(State) %>% summarise(MaxABV.per.State = max(ABV)) %>% arrange(desc(MaxABV.per.State))
 
-#Plot of the top 3 states with the highest IBU
+#Plot of the top 10 states with the highest IBU
 maxABV%>%
-  head(3)%>%
+  head(10)%>%
   ggplot(aes(x=reorder(State,MaxABV.per.State),y=MaxABV.per.State, fill=State)) +
   xlab("State")+
   geom_col()  + ggtitle('States with the Highest Max ABV')
@@ -133,15 +139,19 @@ theme_USGS_box <- function(base_family = "serif", ...){
     legend.background = element_rect(color = "black", fill = "white")
   )
 }
+
+#ABV Box Plot
 ggplot(na_merged_data, aes( y = ABV)) + geom_boxplot(outlier.colour="red",
                 outlier.size=2) + ggtitle('ABV Boxplot with Outliers in Red') + theme_USGS_box()
+
+#IBU Box Plot
 
 ggplot(na_merged_data, aes( y = IBU)) + geom_boxplot(outlier.colour="red",
                 outlier.size=2) + ggtitle('IBU Boxplot with Outliers in Red') + theme_USGS_box()
 
+#Ounces Box Plot
 ggplot(na_merged_data, aes( y = Ounces)) + geom_boxplot(outlier.colour="red",
                 outlier.size=2) + ggtitle('Ounces Boxplot with Outliers in Red') + theme_USGS_box()
-
 
 
 #Histogram of ABV
@@ -166,6 +176,10 @@ library(class)
 library(caret)
 library(e1071)
 
+#Used grepl to find and rename all India Pale Ales to IPA
+#Then used grepl to find and rename all Ales to Other Ale
+#Every other type of beer is renamed
+
 knn_data = na_merged_data %>% 
   mutate(Ale_Type = case_when(
     grepl("IPA",na_merged_data$Style)==TRUE ~ "IPA",
@@ -174,10 +188,11 @@ knn_data = na_merged_data %>%
   )
 )
 
+#Filtered to keep the IPA and Other Ale's for training/test data.
 knn_select_data = knn_data %>% filter(Ale_Type=="IPA" | Ale_Type=="Other Ale")
 
-# Looping for many k and the average of training/test partitions
 
+#Using a train/test ratio of 75-25, looping for many k and the average of training/test partitions.
 set.seed(6)
 splitPerc = .75
 
@@ -203,7 +218,6 @@ MeanAcc = colMeans(masterAcc)
 plot(seq(1,numks,1),MeanAcc, type = "l")
 
 # From this it is clear that the best value for k in our KNN is 5.
-
 # k = 5
 
 trainIndices = sample(1:dim(knn_select_data)[1],round(splitPerc * dim(knn_select_data)[1]))
@@ -212,7 +226,7 @@ test = knn_select_data[-trainIndices,]
 
 classifications = knn(train[,c(4,5)],test[,c(4,5)],train$Ale_Type, prob = TRUE, k = 5)
 table(test$Ale_Type,classifications)
+#Confusion Matrix
 confusionMatrix(table(test$Ale_Type,classifications))
-
 ```
 
