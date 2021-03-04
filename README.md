@@ -30,11 +30,24 @@ Using the `naniar` library in R, we found that there are 62 missing values for A
 
 ### 4.   Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
 
-Using a `group_by()`, and `summarize()` we were able to compute the median ABV and median IBU per state. For our visualization, we wanted to focus on the top ten states with greatest median ABV. We found the top 9 states have a median ABV over **5.5%**
-![Top Ten Median ABV!](Visualizations/MedianABVPerState.png)
+Using a `group_by()`, and `summarize()` we computed the median ABV and median IBU per state. 
 
+For our visualization, we wanted to focus on the top ten states with highest median ABV. We found the top 9 states have a median ABV over **5.5%**. The state with the highest median ABV is Colorado with 6.5%, followed by Florida with 6.2% and Connecticut with 6.1%. If we were planning on making beer with higher alcohol content, we should consider selling that beer to the following states in the visualization.
+
+![Top Ten Median ABV Per State!](Visualizations/MedianABVPerState.png)
+
+Similarly, we focused on the top ten states with the highest median IBU. We see that the top 8 states have a median IBU over **38**. Furthermore, some of the top states a high median IBU are top states with the highest median ABV. We should consider the importance of the IBU when making and selling beers in states.
+
+![Top Ten Median IBU Per State!](Visualizations/MedianIBUPerState.png)
 
 ### 5.   Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
+
+
+
+![Top Ten Max ABV per State!](Visualizations/MaxABVPerState.png)
+
+![Top Ten Max IBU per State!](Visualizations/MaxIBUPerState.png)
+
 
 ### 6.   Comment on the summary statistics and distribution of the ABV variable.
 
