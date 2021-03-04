@@ -18,21 +18,7 @@ breweries = read.csv(file.choose(), header = TRUE)
 # 1. How many breweries are present in each state?
 
 #All states with most breweries
-TotalStateCount = breweries %>% group_by(State) %>% count(State) %>% arrange(desc(n))
-
-TotalStateCount%>%
-  ggplot(aes(x=reorder(State,n),y=n, fill=State)) +
-  xlab("State")+
-  geom_col() + coord_flip() + ggtitle('All States with the Most Breweries') 
-#Top ten states with most breweries.
 StateCount = breweries %>% group_by(State) %>% count(State) %>% arrange(desc(n))
-
-StateCount%>%
-  head(10)%>%
-  ggplot(aes(x=reorder(State,n),y=n, fill=State)) +
-  xlab("State")+
-  geom_col() + coord_flip() + ggtitle('Top 10 State with the Most Breweries') + geom_text(aes(label = n))
-
 
 #Top Ten States with Values
 StateCount%>%
@@ -116,7 +102,7 @@ head(maxABV,3)
 
 #Plot of the top 10 states with the highest IBU
 maxIBU %>%
-  head(10)%>%
+  head(5)%>%
   ggplot(aes(x=reorder(State,MaxIBU.per.State),y=MaxIBU.per.State, fill=State)) +
   xlab("State")+
   geom_col()  + ggtitle('States with the Highest Max IBU') + geom_text(aes(label = MaxIBU.per.State), vjust = -0.5) + ylab("Max IBU")
@@ -124,9 +110,9 @@ maxIBU %>%
 #Get the Max ABV per state
 maxABV = na_merged_data %>% group_by(State) %>% summarise(MaxABV.per.State = max(ABV)) %>% arrange(desc(MaxABV.per.State))
 
-#Plot of the top 10 states with the highest IBU
+#Plot of the top 5 states with the highest IBU
 maxABV%>%
-  head(10)%>%
+  head(5)%>%
   ggplot(aes(x=reorder(State,MaxABV.per.State),y=MaxABV.per.State, fill=State)) +
   xlab("State")+
   geom_col()  + ggtitle('States with the Highest Max ABV')+ geom_text(aes(label = MaxABV.per.State), vjust = -0.5) + ylab("Max ABV")
@@ -134,7 +120,7 @@ maxABV%>%
 
 ```{r}
 #6. Comment on the summary statistics and distribution of the ABV variable.
-
+summary(na_merged_data)
 # Box Plot of ABV, IBU and Ounces
 theme_USGS_box <- function(base_family = "serif", ...){
   theme_bw(base_family = base_family, ...) +
@@ -155,7 +141,6 @@ ggplot(na_merged_data, aes( y = ABV)) + geom_boxplot(outlier.colour="red",
                 outlier.size=2) + ggtitle('ABV Boxplot with Outliers in Red') + theme_USGS_box()
 
 #IBU Box Plot
-
 ggplot(na_merged_data, aes( y = IBU)) + geom_boxplot(outlier.colour="red",
                 outlier.size=2) + ggtitle('IBU Boxplot with Outliers in Red') + theme_USGS_box()
 
@@ -229,7 +214,6 @@ plot(seq(1,numks,1),MeanAcc, type = "l")
 
 # From this it is clear that the best value for k in our KNN is 5.
 # k = 5
-
 trainIndices = sample(1:dim(knn_select_data)[1],round(splitPerc * dim(knn_select_data)[1]))
 train = knn_select_data[trainIndices,]
 test = knn_select_data[-trainIndices,]
