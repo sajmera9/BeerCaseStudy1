@@ -1,15 +1,37 @@
-# Beer Case Study 1
+# Doing Data Science - Case Study 01: Using the Beer and Breweries Datasets
+## By: Satvik Ajmera and Rob Burigo
+
+[Link to Github Repository](https://github.com/sajmera9/BeerCaseStudy1)
+
 
 ## Answers to Analysis Questions
 
 
 ### 1.   How many breweries are present in each state?
 
+For this question, we decided to focus on the top ten states with the most breweries. We found that Colorado has the most breweries with 47, followed by California with 39 breweries, and Michigan with 32 breweries. Here is the plot we created:
+
+![Top Ten States with the Most Breweries!](Visualizations/Top10BreweriesPerState.png)
+
 ### 2.   Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.  (RMD only, this does not need to be included in the presentation or the deck.)
+
+We merged on "Brewery_id" and "Brew_ID"After merging the `breweries.csv` and `beer.csv`, we were able to get the first and last six observations and concatenating them into one dataframe called `head_tail_merge`. Here is a screenshot of what that dataframe looks like:
+
+![First and Last 6 Observations!](Visualizations/MergeFirstAndLast6.png)
+
 
 ### 3.   Address the missing values in each column.
 
+Using the `naniar` library in R, we found that there are 62 missing values for ABV and 1005 values for IBU after merging the both datasets. Going forward, we decided to drop all these NA values. We created a visualization of the missing values in column to visually compare them.
+
+![Missing Values Plot!](Visualizations/MissingValuesPlot.png)
+
+
+
 ### 4.   Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
+
+
+
 
 ### 5.   Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 
