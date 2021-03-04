@@ -15,14 +15,14 @@ For this question, we decided to focus on the top ten states with the most brewe
 
 ### 2.   Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.  (RMD only, this does not need to be included in the presentation or the deck.)
 
-We merged on "Brewery_id" and "Brew_ID"After merging the `breweries.csv` and `beer.csv`, we were able to get the first and last six observations and concatenating them into one dataframe called `head_tail_merge`. Here is a screenshot of what that dataframe looks like:
+ To successfully merge the `beer.csv` and `breweries.csv` , we merged on the unique identifier columns that were in both datasets called `Brewery_id` and `Brew_ID`. Lastly, we concatenating first and last six observations into one dataframe called `head_tail_merge`. Here is a screenshot of what that dataframe looks like:
 
-![First and Last 6 Observations!](Visualizations/MergeFirstAndLast6.png)
+![First and Last Six Observations!](Visualizations/MergeFirstAndLast6.png)
 
 
 ### 3.   Address the missing values in each column.
 
-Using the `naniar` library in R, we found that there are 62 missing values for ABV and 1005 values for IBU after merging the both datasets. Going forward, we decided to drop all these NA values. We created a visualization of the missing values in column to visually compare them.
+Using the `naniar` library in R, we found that there are 62 missing values for ABV and 1005 missing values for IBU after merging the both datasets. Going forward, we decided to drop all these NA values. We created a visualization of the missing values in column to visually compare them.
 
 ![Missing Values Plot!](Visualizations/MissingValuesPlot.png)
 
@@ -30,7 +30,8 @@ Using the `naniar` library in R, we found that there are 62 missing values for A
 
 ### 4.   Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
 
-
+Using a `group_by()`, and `summarize()` we were able to compute the median ABV and median IBU per state. For our visualization, we wanted to focus on the top ten states with greatest median ABV. We found the top 9 states have a median ABV over **5.5%**
+![Top Ten Median ABV!](Visualizations/MedianABVPerState.png)
 
 
 ### 5.   Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
