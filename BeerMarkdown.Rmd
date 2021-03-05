@@ -222,6 +222,152 @@ classifications = knn(train[,c(4,5)],test[,c(4,5)],train$Ale_Type, prob = TRUE, 
 table(test$Ale_Type,classifications)
 #Confusion Matrix
 confusionMatrix(table(test$Ale_Type,classifications))
+
+# Now We want to look at the decision boundaries 
+library(plyr)
+library(ggplot2)
+
+
+# Create a dataframe to simplify charting
+plot.df = data.frame(test, predicted = classifications)
+
+# Use ggplot
+# 2-D plots example only
+# Sepal.Length vs Sepal.Width
+
+# First use Convex hull to determine boundary points of each cluster
+plot.df1 = data.frame(x = plot.df$ABV, 
+                      y = plot.df$IBU, 
+                      predicted = plot.df$predicted)
+
+find_hull = function(df) df[chull(df$x, df$y), ]
+boundary = ddply(plot.df1, .variables = "predicted", .fun = find_hull)
+
+ggplot(plot.df, aes(ABV, IBU, color = predicted, fill = predicted)) + 
+  geom_point(size = 5) + 
+  geom_polygon(data = boundary, aes(x,y), alpha = 0.5) + ggtitle("Prediction Clusters")
+
+# Based on these clusters, it looks like IBU is a stronger predictor of whether or not an ALE is an IPA or not.  Higher IBU has a very strong chance of being an IPA than higher ABV (which still appears to be a positive relationship, just not as strong).
+```
+
+
+```{r}
+# 9. Knock their socks off!  Find one other useful inference from the data that you feel Budweiser may be able to find value in.  You must convince them why it is important and back up your conviction with appropriate statistical evidence. 
+
+# Is the IBU , ABV, Ounces different based on region?  How accurately can we predict the region of a beer using those variables?  The reason this is important is because normally distribution of beer is based on region and it becomes too costly to tailor operations by state. If we know that certain beers are common in certain regions, we will be able to distribute and market more effectively.
+
+#Adding a new column for "Region" in the data set
+NE.name <- c("Connecticut","Maine","Massachusetts","New Hampshire",
+             "Rhode Island","Vermont","New Jersey","New York",
+             "Pennsylvania")
+NE.abrv <- c("CT","ME","MA","NH","RI","VT","NJ","NY","PA")
+NE.ref <- c(NE.name,NE.abrv)
+
+MW.name <- c("Indiana","Illinois","Michigan","Ohio","Wisconsin",
+             "Iowa","Kansas","Minnesota","Missouri","Nebraska",
+             "North Dakota","South Dakota")
+MW.abrv <- c("IN","IL","MI","OH","WI","IA","KS","MN","MO","NE",
+             "ND","SD")
+MW.ref <- c(MW.name,MW.abrv)
+
+S.name <- c("Delaware","District of Columbia","Florida","Georgia",
+            "Maryland","North Carolina","South Carolina","Virginia",
+            "West Virginia","Alabama","Kentucky","Mississippi",
+            "Tennessee","Arkansas","Louisiana","Oklahoma","Texas")
+S.abrv <- c("DE","DC","FL","GA","MD","NC","SC","VA","WV","AL",
+            "KY","MS","TN","AR","LA","OK","TX")
+S.ref <- c(S.name,S.abrv)
+
+W.name <- c("Arizona","Colorado","Idaho","New Mexico","Montana",
+            "Utah","Nevada","Wyoming","Alaska","California",
+            "Hawaii","Oregon","Washington")
+W.abrv <- c("AZ","CO","ID","NM","MT","UT","NV","WY","AK","CA",
+            "HI","OR","WA")
+W.ref <- c(W.name,W.abrv)
+
+region.list <- list(
+  Northeast=NE.ref,
+  Midwest=MW.ref,
+  South=S.ref,
+  West=W.ref)
+
+# Trimming leading white space so we can run the region function
+na_merged_data = na_merged_data%>%mutate_if(is.character, str_trim)
+na_merged_data$Region <- sapply(na_merged_data$State, 
+                 function(x) names(region.list)[grep(x,region.list)])
+
+na_merged_data %>% ggplot(aes(x = Ounces)) + geom_histogram(color= 'black',fill = "white") + facet_wrap(Region~.) + ggtitle('Distribution of Ounces by Region')
+
+na_merged_data %>% ggplot(aes(x = ABV)) + geom_histogram(color= 'black',fill = "white") + facet_wrap(Region~.) + ggtitle('Distribution of ABV by Region')
+
+na_merged_data %>% ggplot(aes(x = IBU)) + geom_histogram(color= 'black',fill = "white") + facet_wrap(Region~.) + ggtitle('Distribution of IBU by Region')
+
+## Lets build a KNN model to predict Region
+set.seed(1112)
+splitPerc = .75
+
+iterations = 100
+numks = 30
+masterAcc = matrix(nrow = iterations, ncol = numks)
+  
+for(j in 1:iterations)
+{
+accs = data.frame(accuracy = numeric(30), k = numeric(30))
+trainIndices = sample(1:dim(na_merged_data)[1],round(splitPerc * dim(na_merged_data)[1]))
+train = na_merged_data[trainIndices,]
+test = na_merged_data[-trainIndices,]
+for(i in 1:numks)
+{
+  classifications = knn(train[,c(4,5,7)],test[,c(4,5,7)],train$Region, prob = TRUE, k = i)
+  table(classifications,test$Region)
+  CM = confusionMatrix(table(classifications,test$Region))
+  masterAcc[j,i] = CM$overall[1]
+}
+}
+MeanAcc = colMeans(masterAcc)
+plot(seq(1,numks,1),MeanAcc, type = "l")
+
+# From this it is clear that the best value for k in our KNN is 30.
+
+# k = 30
+
+trainIndices = sample(1:dim(na_merged_data)[1],round(splitPerc * dim(na_merged_data)[1]))
+train = na_merged_data[trainIndices,]
+test = na_merged_data[-trainIndices,]
+
+classifications = knn(train[,c(4,5,7)],test[,c(4,5,7)],train$Region, prob = TRUE, k = 30)
+table(test$Region,classifications)
+confusionMatrix(table(test$Region,classifications))
+
+# Now We want to look at the decision boundaries 
+library(plyr)
+library(ggplot2)
+
+
+# Create a dataframe to simplify charting
+plot.df = data.frame(test, predicted = classifications)
+
+# Use ggplot
+# 2-D plots example only
+# Sepal.Length vs Sepal.Width
+
+# First use Convex hull to determine boundary points of each cluster
+plot.df1 = data.frame(x = plot.df$ABV, 
+                      y = plot.df$IBU, 
+                      predicted = plot.df$predicted)
+
+find_hull = function(df) df[chull(df$x, df$y), ]
+boundary = ddply(plot.df1, .variables = "predicted", .fun = find_hull)
+
+ggplot(plot.df, aes(ABV, IBU, color = predicted, fill = predicted)) + 
+  geom_point(size = 5) + 
+  geom_polygon(data = boundary, aes(x,y), alpha = 0.5) + ggtitle("Prediction Clusters")
+
+# I am getting two conclusions from this analysis.  
+# 1. There really isn't too much of a difference in beers between regions.  We were able to out-perform the control by 15% (25% compared to ~40%).  This means that we can get a little out of the characteristics of the beer to tell what region it is from, we still aren't that good at predicting it.  This means that in terms of taste and components of beer, we can market consistently among the regions.  Don't have to localize to much.
+
+# 2.  The Northeast is a potential market for growth.  There aren't too many beers that are specific and unique to the Northeast.  This means there is potential to penetrate that market with a unique beer and create a strong brand.
+
 ```
 
 
