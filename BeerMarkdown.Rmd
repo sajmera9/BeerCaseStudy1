@@ -220,6 +220,7 @@ test = knn_select_data[-trainIndices,]
 
 classifications = knn(train[,c(4,5)],test[,c(4,5)],train$Ale_Type, prob = TRUE, k = 5)
 table(test$Ale_Type,classifications)
+
 #Confusion Matrix
 confusionMatrix(table(test$Ale_Type,classifications))
 
@@ -233,7 +234,6 @@ plot.df = data.frame(test, predicted = classifications)
 
 # Use ggplot
 # 2-D plots example only
-# Sepal.Length vs Sepal.Width
 
 # First use Convex hull to determine boundary points of each cluster
 plot.df1 = data.frame(x = plot.df$ABV, 
@@ -349,7 +349,6 @@ plot.df = data.frame(test, predicted = classifications)
 
 # Use ggplot
 # 2-D plots example only
-# Sepal.Length vs Sepal.Width
 
 # First use Convex hull to determine boundary points of each cluster
 plot.df1 = data.frame(x = plot.df$ABV, 
