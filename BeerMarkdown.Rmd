@@ -25,7 +25,7 @@ StateCount%>%
   head(10)%>%
   ggplot(aes(x=reorder(State,n),y=n, fill=State)) +
   xlab("State")+
-  geom_col() + ggtitle('Top 10 State with the Most Breweries') + geom_text(aes(label = n), vjust = -0.5) + ylab("Number of States")
+  geom_col() + ggtitle('Top 10 State with the Most Breweries') + geom_text(aes(label = n), vjust = -0.5) + ylab("Number of Breweries")
 
 
 ```
