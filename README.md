@@ -70,7 +70,7 @@ Finally, we ran the KNN with a 75%-25% train/test split. We were able to predict
 
 Additionally, we created a prediction cluster plot, to better visualize how the KNN is classifying beers as IPAs or Ales. Looking at these clusters, we see that IBU is a stronger predictor when a beer is being classified as an Ale or IPA.  Higher IBU has a stronger chance of being an IPA than does higher ABV (There is still a positive relationship, just not as strong).
 
-![Prediction Clusters for KNN (Question 8)](Visualizations/Question8_PredictionClusters.png)
+![Prediction Clusters Plot for KNN (Question 8)](Visualizations/Question8_PredictionClusters.png)
 
 ### 9. Knock their socks off!  Find one other useful inference from the data that you feel Budweiser may be able to find value in.  You must convince them why it is important and back up your conviction with appropriate statistical evidence. 
 
@@ -86,19 +86,15 @@ Normally, the distribution of beer is based on the region. It can become too exp
 
 Before using a KNN, we wanted to group all the beers into the Northeast, Midwest, South and West regions. Then, we wanted to gain inference on the distribution of IBU, ABV and Ounces. So we created two visualizations of the distributions of ABV and IBU per region below:
 
+![Distribution of ABV and IBU per Region](Visualizations/DistributionByRegion.png)
 
-
-
-
-[put distribution plot here.]
 ABV appears to follow a somewhat normal distribution among regions with the most common being around .06. IBU appears to follow a right skewed distribution among regions with the most common IBU value being around 20.
-
 
 ##### Building the KNN Model:
 
-We ran the loop to find that the best k value is 30. Then, we ran the KNN with IBU, ABV, and Ounces variables. Our accuracy was approximately 40%. Here is the prediction clusters. As you can see there is a lot of overlap between regions when looking at IBU vs ABV. This overlap shows how each region has similar characteristics to their beer.
+We ran the loop to find that the best k value is 30. Then, we ran the KNN with IBU, ABV, and Ounces variables. Our accuracy was approximately 40%. Here is the prediction clusters plot. As you can see there is a lot of overlap between regions when looking at IBU vs ABV. This overlap shows how each region has similar characteristics to their beer.
 
-[put prediction cluster viz here.]
+![Prediction Clusters Plot for KNN (Question 9)](Visualizations/Question9_PredictionCluster.png)
 
 ##### Conclusion:
 
