@@ -6,7 +6,6 @@
 
 ## Analysis
 
-
 ### 1. How many breweries are present in each state?
 
 For this question, we decided to focus on the top ten states with the most breweries. We found that Colorado has the most breweries with 47, followed by California with 39 breweries, and Michigan with 32 breweries. Here is the plot we created:
