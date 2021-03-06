@@ -33,7 +33,6 @@ StateCount%>%
 
 ```{r}
 #2.   Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.  (RMD only, this does not need to be included in the presentation or the deck.)
-library(dplyr)
 
 #Merged both datasets on Brewery ID
 merged_data = merge(beer, breweries, by.x = "Brewery_id", by.y = "Brew_ID")
@@ -96,9 +95,6 @@ median_data%>%
 
 #Get the Max IBU per state
 maxIBU = na_merged_data %>% group_by(State) %>% summarise(MaxIBU.per.State = max(IBU)) %>% arrange(desc(MaxIBU.per.State))
-
-head(maxIBU,3)
-head(maxABV,3)
 
 #Plot of the top 10 states with the highest IBU
 maxIBU %>%
@@ -226,7 +222,6 @@ confusionMatrix(table(test$Ale_Type,classifications))
 
 # Now We want to look at the decision boundaries 
 library(plyr)
-library(ggplot2)
 
 
 # Create a dataframe to simplify charting
@@ -292,7 +287,7 @@ region.list <- list(
   West=W.ref)
 
 # Trimming leading white space so we can run the region function
-na_merged_data = na_merged_data%>%mutate_if(is.character, str_trim)
+na_merged_data = na_merged_data %>% mutate_if(is.character, str_trim)
 na_merged_data$Region <- sapply(na_merged_data$State, 
                  function(x) names(region.list)[grep(x,region.list)])
 
@@ -341,8 +336,6 @@ confusionMatrix(table(test$Region,classifications))
 
 # Now We want to look at the decision boundaries 
 library(plyr)
-library(ggplot2)
-
 
 # Create a dataframe to simplify charting
 plot.df = data.frame(test, predicted = classifications)
