@@ -9,8 +9,8 @@ editor_options:
 ```{r}
 library(tidyverse)
 #Read both Beer and Brewery csv's
-beer = read.csv(file.choose(), header = TRUE)
-breweries = read.csv(file.choose(), header = TRUE)
+beer = read.csv("./Data/Beers.csv", header = TRUE)
+breweries = read.csv("./Data/Breweries.csv", header = TRUE)
 ```
 
 
