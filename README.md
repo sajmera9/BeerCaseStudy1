@@ -84,16 +84,26 @@ Normally, the distribution of beer is based on the region. It can become too exp
 
 ##### Tidying the Data:
 
-Before using a KNN, we wanted to group all the beers into the Northwest, Midwest, South and West regions. Then, we wanted to gain inference on the distribution of IBU, ABV and Ounces. So we used ggplot to create three visualizations below:
+Before using a KNN, we wanted to group all the beers into the Northeast, Midwest, South and West regions. Then, we wanted to gain inference on the distribution of IBU, ABV and Ounces. So we created two visualizations of the distributions of ABV and IBU per region below:
+
+
+
+
+
+[put distribution plot here.]
+ABV appears to follow a somewhat normal distribution among regions with the most common being around .06. IBU appears to follow a right skewed distribution among regions with the most common IBU value being around 20.
+
 
 ##### Building the KNN Model:
 
-We ran the loop to find that the best k value is 30. Then, we ran the KNN with IBU, ABV, and Ounces variables. Our accuracy was approximately 40%.
+We ran the loop to find that the best k value is 30. Then, we ran the KNN with IBU, ABV, and Ounces variables. Our accuracy was approximately 40%. Here is the prediction clusters. As you can see there is a lot of overlap between regions when looking at IBU vs ABV. This overlap shows how each region has similar characteristics to their beer.
+
+[put prediction cluster viz here.]
 
 ##### Conclusion:
 
-There really isn't too much of a difference in beers between regions.  We were able to out-perform the control by 15% (25% compared to ~40%).  This means that we can get a little out of the characteristics of the beer to tell what region it is from, we still aren't able to predict the region of a beer from with high accuracy.  This means that in terms of taste and components of beer, we can market consistently among the regions.  Don't have to localize to much.
+There really isn't too much of a difference in beers between regions.  We were able to out-perform the control by 15% (25% compared to ~40%).  This means that while we can get a little out of the characteristics of the beer to tell what region it is from, we still were not able to predict the region of a beer with high accuracy.  This means that in terms of taste and components of beer, we can market consistently among the regions.
  
 ##### Other Noteworthy Insights:
 
-The Northeast is a potential market for growth.  There aren't too many beers that are specific and unique to the Northeast.  This means there is potential to penetrate that market with a unique beer and create a strong brand.
+The Northeast is a potential market for growth.  There aren't too many beers that are specific and unique to the Northeast. This means there is potential to penetrate that market with a unique beer and create a strong brand.
